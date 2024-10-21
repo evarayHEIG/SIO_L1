@@ -4,16 +4,17 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
-public class DoublyLinkedList<T> implements Iterable<T> {
+public class DoublyLinkedList<T> {
 
 
     public Iterator<T> iterator() {
         return new DoublyLinkedListIterator();
     }
 
+
     class DoublyLinkedListIterator implements Iterator<T> {
 
-        private Node<T> current;
+        private DoublyLinkedList.Node<T> current;
         public DoublyLinkedListIterator() {
             current = head;
         }
@@ -24,7 +25,6 @@ public class DoublyLinkedList<T> implements Iterable<T> {
 
         @Override
         public T next() {
-
             if(!hasNext()) {
                 throw new NoSuchElementException("No next element");
             }
@@ -32,7 +32,6 @@ public class DoublyLinkedList<T> implements Iterable<T> {
             current = current.next;
             return old.data;
         }
-
     }
 
     Node<T> head;
@@ -45,35 +44,10 @@ public class DoublyLinkedList<T> implements Iterable<T> {
         size = 0;
     }
 
-
     public static class Node<T> {
         T data;
         Node<T> prev;
         Node<T> next;
-
-        public T getData() {
-            return data;
-        }
-
-        public void setData(T data) {
-            this.data = data;
-        }
-
-        public Node<T> getPrev() {
-            return prev;
-        }
-
-        public void setPrev(Node<T> prev) {
-            this.prev = prev;
-        }
-
-        public Node<T> getNext() {
-            return next;
-        }
-
-        public void setNext(Node<T> next) {
-            this.next = next;
-        }
 
         Node(T data) {
             this.data = data;
@@ -105,10 +79,10 @@ public class DoublyLinkedList<T> implements Iterable<T> {
 
     public void addAfter(Node<T> node, T value) {
 
-        if (node.next() == null) {
+        if (node.next == null) {
             addLast(value);
         } else {
-           Node<T> newNode = new Node<>(value);
+            Node<T> newNode = new Node<>(value);
             node.next.prev = newNode;
             newNode.next = node.next;
             newNode.prev = node;
@@ -130,20 +104,6 @@ public class DoublyLinkedList<T> implements Iterable<T> {
         size++;
     }
 
-    public void remove(Node<T> node) {
-        Node<T> previous = node.prev;
-        if(node.hasPrev()) {
-            node.prev = node.next;
-        } else {
-            head = node.next;
-        }
-
-        if(node.hasNext()) {
-            node.next.prev = node.prev;
-        } else {
-            tail = node.next.prev;
-        }
-    }
     public void addLast(T data) {
         Node<T> newNode = new Node<>(data);
         if (tail == null) {

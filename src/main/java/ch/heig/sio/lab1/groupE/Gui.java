@@ -10,7 +10,8 @@ public final class Gui {
     HeuristicComboItem[] heuristics = {
         new HeuristicComboItem("Canonical tour", new CanonicalTour()),
         // TODO: Add your heuristics here
-            new HeuristicComboItem("Random Tour", new RandomInsertionTour())
+            new HeuristicComboItem("Random Tour", new RandomInsertionTour()),
+            new HeuristicComboItem("Nearest Tour", new NearestInsertionTourDup())
     };
 
     // May not work on all platforms, comment out if necessary

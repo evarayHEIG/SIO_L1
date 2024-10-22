@@ -7,7 +7,11 @@ import java.util.LinkedList;
 public class NearestInsertionTour extends DistanceBasedTour {
 
 
-
+   /**
+     * Get the closest city from the current tour
+     * @param candidateCities the list of candidate cities
+     * @return the index of the closest city
+     */
     public int getClosestCity(LinkedList<CandidateCity> candidateCities) {
 
 
@@ -27,7 +31,10 @@ public class NearestInsertionTour extends DistanceBasedTour {
 
 
 
-
+    /**
+     * Get the closest city from the current tour and update the closest cities
+     * @return the index of the closest city
+     */
     @Override
     public int getNextCityIndex(TspData data) {
         int nextCityIndex = getClosestCity(candidateCities);

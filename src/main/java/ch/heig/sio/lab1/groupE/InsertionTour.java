@@ -8,10 +8,25 @@ import ch.heig.sio.lab1.tsp.TspTour;
 
 public abstract class InsertionTour implements ObservableTspConstructiveHeuristic {
 
-
+    /**
+     * The current tour
+     */
     DoublyLinkedList<Edge> currTour;
 
+    /**
+     * Initializes the tour
+     * @param data TspData
+     * @param startCityIndex the start city
+     */
     public abstract void init(TspData data, int startCityIndex);
+
+    /**
+     * Computes the tour
+     * @param data TspData
+     * @param startCity the start city
+     * @param observer the observer
+     * @return the tour
+     */
     @Override
     public TspTour computeTour(TspData data, int startCity, TspHeuristicObserver observer) {
         init(data, startCity);
@@ -27,6 +42,11 @@ public abstract class InsertionTour implements ObservableTspConstructiveHeuristi
         return new TspTour(data, fillTour(currTour, data.getNumberOfCities()), length);
     }
 
+    /**
+     * Computes the next city to insert
+     * @param data the TspData
+     * @return the index of the next city to insert
+     */
     public abstract int getNextCityIndex(TspData data);
     /**
      * Computes the best insertion
@@ -65,6 +85,12 @@ public abstract class InsertionTour implements ObservableTspConstructiveHeuristi
 
     }
 
+    /**
+     * Fills the tour
+     * @param currentTour the current tour as a list of edges
+     * @param size the size of the tour
+     * @return the tour as an array of integers
+     */
     public int[] fillTour(DoublyLinkedList<Edge> currentTour, int size) {
         var current = currentTour.head;
         int index = 0;

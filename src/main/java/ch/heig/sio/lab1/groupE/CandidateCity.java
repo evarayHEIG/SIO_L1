@@ -2,6 +2,10 @@ package ch.heig.sio.lab1.groupE;
 
 import static java.util.Collections.min;
 
+/**
+ * A candidate city is a city that is not yet in the tour and that is a candidate to be inserted in the tour
+ * It is defined by the index of the city in the tour, the index of the city in the list of unvisited cities and the distance between the city in the tour and the city in the list of unvisited cities
+ */
 public class CandidateCity implements Comparable<CandidateCity> {
 
     private int tourVertex;

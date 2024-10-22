@@ -4,6 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 
+/**
+ * A doubly linked list that allows us to insert element in the middle with o(1) complexity if we keep the node after which we want to insert
+ * @param <T> the type of the elements in the list
+ */
+
 public class DoublyLinkedList<T> {
 
 

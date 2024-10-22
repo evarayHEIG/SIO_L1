@@ -12,6 +12,9 @@ import java.util.Set;
 
 public abstract class DistanceBasedTour extends InsertionTour {
 
+    /**
+     * The list of candidate cities
+     */
     LinkedList<CandidateCity> candidateCities;
 
 

@@ -27,7 +27,7 @@ public abstract class DistanceBasedTour extends InsertionTour {
 
     public void updateClosestCities(TspData data, int lastCityInserted, LinkedList<CandidateCity> candidateCities) {
         // on enlève la ville du tour du set des villes non visitées
-        candidateCities.remove((CandidateCity) candidateCities.stream().filter(city -> city.getUnvisitedVertex() == lastCityInserted).toArray()[0]);
+        candidateCities.removeIf(city -> city.getUnvisitedVertex() == lastCityInserted);
         for(var city : candidateCities) {
 
             if(data.getDistance(lastCityInserted, city.getUnvisitedVertex()) < city.getDistance()) {

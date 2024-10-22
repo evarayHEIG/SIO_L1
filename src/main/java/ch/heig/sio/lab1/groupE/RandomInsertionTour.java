@@ -1,22 +1,30 @@
 package ch.heig.sio.lab1.groupE;
 
-import ch.heig.sio.lab1.display.ObservableTspConstructiveHeuristic;
-import ch.heig.sio.lab1.display.TspHeuristicObserver;
-import ch.heig.sio.lab1.tsp.Edge;
 import ch.heig.sio.lab1.tsp.TspData;
-import ch.heig.sio.lab1.tsp.TspTour;
-import org.w3c.dom.Node;
 
 import java.util.*;
 
 public class RandomInsertionTour extends InsertionTour {
 
 
+    ArrayList<Integer> order;
+    int currentIndex = 0;
 
+
+public void init(TspData data, int startCityIndex) {
+    currentIndex = 0;
+    order = new ArrayList<>(data.getNumberOfCities()-1);
+    for (int i = 0; i < data.getNumberOfCities(); i++) {
+        if (i != startCityIndex) {
+            order.add(i);
+        }
+    }
+    Collections.shuffle(order);
+}
 
 
     // Version de computeTour ou on définit une DoublyLinkedList<Edge>
-   public TspTour computeTour(TspData data, int startCityIndex, TspHeuristicObserver observer) {
+  /* public TspTour computeTour(TspData data, int startCityIndex, TspHeuristicObserver observer) {
         int n = data.getNumberOfCities();
 
 
@@ -63,7 +71,7 @@ public class RandomInsertionTour extends InsertionTour {
            /* minNode.data = new Edge(oldEdge.u(), order.get(i));
             tempOrder.addAfter(minNode, new Edge(order.get(i), oldEdge.v()));*/
             // on update l'observer pour le graphisme
-            observer.update(tempOrder.iterator());
+            /*observer.update(tempOrder.iterator());
         }
 
         var current = tempOrder.head;
@@ -76,6 +84,11 @@ public class RandomInsertionTour extends InsertionTour {
         }
 
         return new TspTour(data, tour, length);
+    }*/
+
+    @Override
+    public int getNextCityIndex(TspData data) {
+        return  order.get(currentIndex++);
     }
 
 

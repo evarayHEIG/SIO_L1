@@ -6,40 +6,28 @@ import ch.heig.sio.lab1.tsp.Edge;
 import ch.heig.sio.lab1.tsp.TspData;
 import ch.heig.sio.lab1.tsp.TspTour;
 
-import java.util.Set;
-
 public abstract class InsertionTour implements ObservableTspConstructiveHeuristic {
 
 
+    DoublyLinkedList<Edge> currTour;
 
-   /* @Override
-    public TspTour computeTour(TspData data, int startCityIndex, TspHeuristicObserver observer) {
-        DoublyLinkedList<Edge> edges = new DoublyLinkedList<>();
+    public abstract void init(TspData data, int startCityIndex);
+    @Override
+    public TspTour computeTour(TspData data, int startCity, TspHeuristicObserver observer) {
+        init(data, startCity);
+        currTour = new DoublyLinkedList<>();
         long length = 0;
-        int[] tour = new int[data.getNumberOfCities()];
-        edges.addLast(new Edge(startCityIndex, startCityIndex));
-        for (int i = 1; i < data.getNumberOfCities(); i++) {
-            int nextCityIndex = getNextCityIndex(data, startCityIndex);
-            System.out.println(nextCityIndex);
-            length += bestInsertion(data, nextCityIndex, edges);
-            observer.update(edges.iterator());
+        currTour.addLast(new Edge(startCity, startCity));
+        for (int i = 0; i < data.getNumberOfCities()-1; i++) {
+            int nextCityIndex = getNextCityIndex(data);
+            length += bestInsertion(data, nextCityIndex, currTour);
+            observer.update(currTour.iterator());
         }
 
-            var current = edges.head;
-            int index = 0;
+        return new TspTour(data, fillTour(currTour, data.getNumberOfCities()), length);
+    }
 
-            while (current != null) {
-                tour[index] = current.data.u();
-                current = current.next;
-                index++;
-            }
-
-            return new TspTour(data, tour, length);
-
-    }*/
-
-    //public abstract int getNextCityIndex(TspData data, Set<Integer> unvisitedCities);
-
+    public abstract int getNextCityIndex(TspData data);
     /**
      * Computes the best insertion
      * @param data TspData

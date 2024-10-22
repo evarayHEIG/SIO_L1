@@ -7,33 +7,36 @@ import ch.heig.sio.lab1.tsp.TspTour;
 
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.Set;
 
 public abstract class DistanceBasedTour extends InsertionTour {
 
-    public abstract int getNextCityIndex(TspData data, Set<Integer> unvisited, ArrayList<CandidateCity> candidateCities);
+    LinkedList<CandidateCity> candidateCities;
+
 
     @Override
-    public TspTour computeTour(TspData data, int startCityIndex, TspHeuristicObserver observer) {
-        ArrayList<CandidateCity> candidateVertices = new ArrayList<>();
-        Set<Integer> unvisitedVertices = new HashSet<>();
-        long length = 0;
+    public void init(TspData data, int startCityIndex) {
+        candidateCities = new LinkedList<>();
         for(int i = 0; i < data.getNumberOfCities(); i++) {
-
-                unvisitedVertices.add(i);
-                candidateVertices.add(new CandidateCity(startCityIndex, i, data.getDistance(startCityIndex, i)));
-
+            if(i != startCityIndex) {
+                candidateCities.add(new CandidateCity(startCityIndex, i, data.getDistance(startCityIndex, i)));
+            }
         }
-        unvisitedVertices.remove(startCityIndex);
-        DoublyLinkedList<Edge> currentTour = new DoublyLinkedList<>();
-        currentTour.addLast(new Edge(startCityIndex, startCityIndex));
-
-        for(int i = 0; i < data.getNumberOfCities()-1; i++) {
-            int nextCity = getNextCityIndex(data, unvisitedVertices, candidateVertices);
-            length += bestInsertion(data, nextCity, currentTour);
-            observer.update(currentTour.iterator());
-        }
-
-        return new TspTour(data, fillTour(currentTour, data.getNumberOfCities()), length);
     }
+
+    public void updateClosestCities(TspData data, int lastCityInserted, LinkedList<CandidateCity> candidateCities) {
+        // on enlève la ville du tour du set des villes non visitées
+        candidateCities.remove((CandidateCity) candidateCities.stream().filter(city -> city.getUnvisitedVertex() == lastCityInserted).toArray()[0]);
+        for(var city : candidateCities) {
+
+            if(data.getDistance(lastCityInserted, city.getUnvisitedVertex()) < city.getDistance()) {
+                city.setTourVertex(lastCityInserted);
+                city.setDistance(data.getDistance(lastCityInserted, city.getUnvisitedVertex()));
+            }
+
+        }
+    }
+
+
 }

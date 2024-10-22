@@ -11,7 +11,8 @@ public final class Gui {
         new HeuristicComboItem("Canonical tour", new CanonicalTour()),
         // TODO: Add your heuristics here
             new HeuristicComboItem("Random Tour", new RandomInsertionTour()),
-            new HeuristicComboItem("Nearest Tour", new NearestInsertionTourDup())
+            new HeuristicComboItem("Nearest Tour", new NearestInsertionTour()),
+            new HeuristicComboItem("Farthest Tour", new FarthestInsertionTour())
     };
 
     // May not work on all platforms, comment out if necessary

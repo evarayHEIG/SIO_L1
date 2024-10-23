@@ -10,7 +10,7 @@ public class RandomInsertionTour extends InsertionTour {
      * The order of the cities
      */
     ArrayList<Integer> order;
-
+    int seed;
     /**
      * The current index in the order
      */
@@ -30,7 +30,9 @@ public class RandomInsertionTour extends InsertionTour {
             order.add(i);
         }
     }
-    Collections.shuffle(order);
+    Random random = new Random(seed);
+
+    Collections.shuffle(order, random);
 }
 
 
@@ -42,6 +44,16 @@ public class RandomInsertionTour extends InsertionTour {
     @Override
     public int getNextCityIndex(TspData data) {
         return  order.get(currentIndex++);
+    }
+
+    public RandomInsertionTour(int seed) {
+        super();
+        this.seed = seed;
+    }
+
+    public RandomInsertionTour() {
+        super();
+        this.seed = new Random().nextInt();
     }
 
 

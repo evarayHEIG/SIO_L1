@@ -5,12 +5,28 @@ import ch.heig.sio.lab1.tsp.TspData;
 import ch.heig.sio.lab1.tsp.TspTour;
 
 import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 public final class Analyze {
+
+    static HashMap<String, Long> optimalLengths = new HashMap<>(Map.of(
+            "pcb442", 50778L,
+            "att532", 86729L,
+            "u574", 36905L,
+            "pcb1173", 56892L,
+            "nrw1379", 56638L,
+            "u1817", 57201L
+    ));
+
+    // pcb442 : 50778
+    // att532 : 86729
+    // u574 : 36905
+    // pcb1173   : 56892
+    // nrw1379  : 56638
+    // u1817 : 57201
+
   public static void main(String[] args) {
     // TODO
     //  - Renommer le package ;
@@ -26,28 +42,37 @@ public final class Analyze {
             new HeuristicComboItem("Farthest Tour", new FarthestInsertionTour())
     };
 
-    String[] files = {"att532", "nrw1379", "pcb442", "pcb1173", "u574", "u1817"};
+    String[] files = {"att532"/*, "nrw1379", "pcb442", "pcb1173", "u574", "u1817"*/};
 
-    ArrayList<Result> results = new ArrayList<>();
-
-    for (String file : files) {
+    HashMap<String, HashMap<String, ArrayList<Long>>> results = new HashMap<>();
         TspData data = null;
-        try {
-            data = TspData.fromFile("data/" + file + ".dat");
-        } catch (FileNotFoundException e) {
-            throw new RuntimeException(e);
-        }
-        for (HeuristicComboItem heuristicItem : heuristics) {
+      // After computing all tours, print statistics in a table format
+      for (String file : files) {
+          try {
+              data = TspData.fromFile("data/" + file + ".dat");
+          } catch (FileNotFoundException e) {
+              e.getMessage();
+          }
+          results.put(file, new HashMap<>());
 
-        for (int startCity = 0; startCity < data.getNumberOfCities(); startCity++) {
-          TspTour tour = heuristicItem.computeTour(data, startCity);
-          results.add(new Result(heuristicItem.toString(), startCity, tour.length()));
+          for (HeuristicComboItem heuristic : heuristics) {
 
-        }
-      }
-      writeResultsToFile(results, "csv/" + file + ".csv");
+              results.get(file).put(heuristic.toString(), new ArrayList<>());
+              // Collect lengths of tours for each heuristic
+             for (int i = 0; i < data.getNumberOfCities(); i++) {
+                    TspTour tour = heuristic.computeTour(data, i);
+                    results.get(file).get(heuristic.toString()).add(tour.length());
+                }
+             }
+          printTable(results.get(file), file);
+         // System.out.println("Statistics for file: " + file);
+          }
 
-    }
+
+
+
+
+
 
     // Longueurs optimales :
     // pcb442 : 50778
@@ -61,32 +86,75 @@ public final class Analyze {
     // TspData data = TspData.fromFile("data/att532.dat");
   }
 
-  private static void writeResultsToFile(List<Result> results, String fileName) {
-    try (FileWriter writer = new FileWriter(fileName)) {
-      writer.write("Heuristic,Start City,Distance\n");
-      for (Result result : results) {
-        writer.write(result.toString() + "\n");
-      }
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-  }
-
   static class Result {
-    String heuristicName;
     int startCity;
     Long distance;
 
 
-    Result(String heuristicName, int startCity, Long distance) {
-      this.heuristicName = heuristicName;
+    Result(int startCity, Long distance) {
       this.startCity = startCity;
       this.distance = distance;
     }
 
 
-    public String toString() {
-      return  heuristicName + "," + startCity + "," + distance;
-    }
+
   }
+
+    static void printStatistics(ArrayList<Long> lengths, String fileName) {
+        lengths.sort(Long::compareTo);
+        Long max = lengths.getLast();
+        Long min = lengths.getFirst();
+        double median = median(lengths);
+        double mean = lengths.stream().mapToLong(Long::longValue).average().orElse(0);
+        double stdDev = Math.sqrt(lengths.stream().mapToDouble(l -> Math.pow(l - mean, 2)).sum() / lengths.size());
+
+        System.out.println("Statistics for file: " + fileName);
+        System.out.printf("Max: %d, Min: %d, Median: %.2f, Mean: %.2f, Std Dev: %.2f\n", max, min, median, mean, stdDev);
+    }
+
+    static void printTable(Map<String, ArrayList<Long>> heuristicLengths, String fileName) {
+        String[] metrics = {"Max", "Min", "Median", "Mean", "Standard Deviation", "Performance"};
+        System.out.println("Statistics for file: " + fileName);
+        System.out.printf("%-20s", "Metric");
+        for (String heuristic : heuristicLengths.keySet()) {
+            System.out.printf("%-20s", heuristic);
+        }
+        System.out.printf("%-20s\n", "Optimal Tour");
+
+        for (String metric : metrics) {
+            System.out.printf("%-20s", metric);
+            for (ArrayList<Long> lengths : heuristicLengths.values()) {
+                double value = switch (metric) {
+                    case "Max" -> lengths.getLast();
+                    case "Min" -> lengths.getFirst();
+                    case "Median" -> median(lengths);
+                    case "Mean" -> lengths.stream().mapToLong(Long::longValue).average().orElse(0);
+                    case "Standard Deviation" ->
+                            Math.sqrt(lengths.stream().mapToDouble(l -> Math.pow(l - median(lengths), 2)).sum() / lengths.size());
+                    case "Performance" ->
+                            lengths.stream().mapToLong(Long::longValue).average().orElse(0) * 100 / optimalLengths.get(fileName);
+                    default -> 0;
+                };
+                System.out.printf("%-20.2f", value);
+            }
+            double value = switch (metric) {
+                case "Standard Deviation" -> 0;
+                case "Performance" -> 100;
+                default -> optimalLengths.get(fileName);
+            };
+            System.out.printf("%-20.2f\n", value);
+        }
+    }
+
+    public static double median(ArrayList<Long> sortedValues) {
+        if (sortedValues.size() % 2 == 1)
+            return sortedValues.get((sortedValues.size() + 1) / 2 - 1);
+        else {
+            double lower = sortedValues.get(sortedValues.size() / 2 - 1);
+            double upper = sortedValues.get(sortedValues.size() / 2);
+            return (lower + upper) / 2.0;
+        }
+    }
+
 }
+

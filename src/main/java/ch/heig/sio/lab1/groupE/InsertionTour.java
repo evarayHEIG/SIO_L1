@@ -42,6 +42,7 @@ public abstract class InsertionTour implements ObservableTspConstructiveHeuristi
         return new TspTour(data, fillTour(currTour, data.getNumberOfCities()), length);
     }
 
+
     /**
      * Computes the next city to insert
      * @param data the TspData

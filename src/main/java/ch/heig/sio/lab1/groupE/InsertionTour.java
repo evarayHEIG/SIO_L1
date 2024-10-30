@@ -9,6 +9,7 @@ import ch.heig.sio.lab1.tsp.TspTour;
 /**
  * Abstract class that represents an insertion tour.
  * It implements the ObservableTspConstructiveHeuristic interface.
+ *
  * @author Rachel Tranchida
  * @author Eva Ray
  */
@@ -28,6 +29,8 @@ public abstract class InsertionTour implements ObservableTspConstructiveHeuristi
     public void init(TspData data, int startCityIndex) {
         // We initialize the current tour
         currTour = new CustomLinkedList<>();
+        // We add the startCity of the tour first
+        currTour.addFirst(new Edge(startCityIndex, startCityIndex));
     }
 
     /**
@@ -42,11 +45,9 @@ public abstract class InsertionTour implements ObservableTspConstructiveHeuristi
     public TspTour computeTour(TspData data, int startCity, TspHeuristicObserver observer) {
         // We initialize the tour
         init(data, startCity);
-
         // We initialize the length of the tour
         long length = 0;
-        // We add the startCity of the tour first
-        currTour.addFirst(new Edge(startCity, startCity));
+
         // We iterate on all the cities except the start city
         for (int i = 0; i < data.getNumberOfCities() - 1; i++) {
             // We retrieve the next city to insert

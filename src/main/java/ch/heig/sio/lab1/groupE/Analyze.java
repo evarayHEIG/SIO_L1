@@ -9,8 +9,34 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
+// Longueurs optimales :
+// pcb442 : 50778
+// att532 : 86729
+// u574 : 36905
+// pcb1173   : 56892
+// nrw1379  : 56638
+// u1817 : 57201
+
+// Exemple de lecture d'un jeu de données :
+// TspData data = TspData.fromFile("data/att532.dat");
+
+/**
+ * Analyze the performance of different heuristics on different files.
+ * The metrics computed are:
+ * - Max
+ * - Min
+ * - Median
+ * - Mean
+ * - Standard Deviation
+ * - Performance (Mean / Optimal Length * 100)
+ * The results are printed in a table format in the terminal.
+ *
+ * @author Rachel Tranchida
+ * @author Eva Ray
+ */
 public final class Analyze {
 
+    // HashMap with optimal lengths for each file
     static HashMap<String, Long> optimalLengths = new HashMap<>(Map.of(
             "pcb442", 50778L,
             "att532", 86729L,
@@ -20,98 +46,65 @@ public final class Analyze {
             "u1817", 57201L
     ));
 
-    // pcb442 : 50778
-    // att532 : 86729
-    // u574 : 36905
-    // pcb1173   : 56892
-    // nrw1379  : 56638
-    // u1817 : 57201
+    public static void main(String[] args) {
+        // TODO
+        //  - Renommer le package ;
+        //  - Implémenter les différentes heuristiques en écrivant le code dans ce package, et uniquement celui-ci
+        //    (sous-packages et packages de tests ok) ;
+        //  - Factoriser le code commun entre les différentes heuristiques ;
+        //  - Documentation soignée comprenant :
+        //    - la javadoc, avec auteurs et description des implémentations ;
+        //    - des commentaires sur les différentes parties de vos algorithmes.
 
-  public static void main(String[] args) {
-    // TODO
-    //  - Renommer le package ;
-    //  - Implémenter les différentes heuristiques en écrivant le code dans ce package, et uniquement celui-ci
-    //    (sous-packages et packages de tests ok) ;
-    //  - Factoriser le code commun entre les différentes heuristiques ;
-    //  - Documentation soignée comprenant :
-    //    - la javadoc, avec auteurs et description des implémentations ;
-    //    - des commentaires sur les différentes parties de vos algorithmes.
-    HeuristicComboItem[] heuristics = {
-            new HeuristicComboItem("Random Tour", new RandomInsertionTour(0x134DA73)),
-            new HeuristicComboItem("Nearest Tour", new NearestInsertionTour()),
-            new HeuristicComboItem("Farthest Tour", new FarthestInsertionTour())
-    };
+        // Array of heuristics to compare
+        HeuristicComboItem[] heuristics = {
+                new HeuristicComboItem("Random Tour", new RandomInsertionTour(0x134DA73)),
+                new HeuristicComboItem("Nearest Tour", new NearestInsertionTour()),
+                new HeuristicComboItem("Farthest Tour", new FarthestInsertionTour())
+        };
+        // Array of files to analyze
+        String[] files = {"att532", "nrw1379", "pcb442", "pcb1173", "u574", "u1817"};
+        // HashMap to store the results for each file
+        HashMap<String, HashMap<String, ArrayList<Long>>> results = new HashMap<>();
+        // data is used to store the data from the file
+        TspData data;
+        // After computing all tours, print statistics in a table format
+        for (String file : files) {
+            try {
+                data = TspData.fromFile("data/" + file + ".dat");
 
-    String[] files = {"att532"/*, "nrw1379", "pcb442", "pcb1173", "u574", "u1817"*/};
+                results.put(file, new HashMap<>());
 
-    HashMap<String, HashMap<String, ArrayList<Long>>> results = new HashMap<>();
-        TspData data = null;
-      // After computing all tours, print statistics in a table format
-      for (String file : files) {
-          try {
-              data = TspData.fromFile("data/" + file + ".dat");
-          } catch (FileNotFoundException e) {
-              e.getMessage();
-          }
-          results.put(file, new HashMap<>());
+                for (HeuristicComboItem heuristic : heuristics) {
 
-          for (HeuristicComboItem heuristic : heuristics) {
-
-              results.get(file).put(heuristic.toString(), new ArrayList<>());
-              // Collect lengths of tours for each heuristic
-             for (int i = 0; i < data.getNumberOfCities(); i++) {
-                    TspTour tour = heuristic.computeTour(data, i);
-                    results.get(file).get(heuristic.toString()).add(tour.length());
+                    results.get(file).put(heuristic.toString(), new ArrayList<>());
+                    // Collect lengths of tours for each heuristic
+                    for (int i = 0; i < data.getNumberOfCities(); i++) {
+                        TspTour tour = heuristic.computeTour(data, i);
+                        results.get(file).get(heuristic.toString()).add(tour.length());
+                    }
                 }
-             }
-          printTable(results.get(file), file);
-         // System.out.println("Statistics for file: " + file);
-          }
-
-
-
-
-
-
-
-    // Longueurs optimales :
-    // pcb442 : 50778
-    // att532 : 86729
-    // u574 : 36905
-    // pcb1173   : 56892
-    // nrw1379  : 56638
-    // u1817 : 57201
-
-    // Exemple de lecture d'un jeu de données :
-    // TspData data = TspData.fromFile("data/att532.dat");
-  }
-
-  static class Result {
-    int startCity;
-    Long distance;
-
-
-    Result(int startCity, Long distance) {
-      this.startCity = startCity;
-      this.distance = distance;
+                printTable(results.get(file), file);
+            } catch (FileNotFoundException e) {
+                System.out.println(e.getMessage());
+            }
+        }
     }
 
-
-
-  }
-
-    static void printStatistics(ArrayList<Long> lengths, String fileName) {
-        lengths.sort(Long::compareTo);
-        Long max = lengths.getLast();
-        Long min = lengths.getFirst();
-        double median = median(lengths);
-        double mean = lengths.stream().mapToLong(Long::longValue).average().orElse(0);
-        double stdDev = Math.sqrt(lengths.stream().mapToDouble(l -> Math.pow(l - mean, 2)).sum() / lengths.size());
-
-        System.out.println("Statistics for file: " + fileName);
-        System.out.printf("Max: %d, Min: %d, Median: %.2f, Mean: %.2f, Std Dev: %.2f\n", max, min, median, mean, stdDev);
-    }
-
+    /**
+     * Print statistics for each heuristic for a given file results.
+     * The statistics are:
+     * - Max
+     * - Min
+     * - Median
+     * - Mean
+     * - Standard Deviation
+     * - Performance (Mean / Optimal Length * 100)
+     * The results are printed in a table format in the terminal.
+     *
+     * @param heuristicLengths the heuristic name mapped to the distance found for each starting city
+     * @param fileName         the file name
+     */
     static void printTable(Map<String, ArrayList<Long>> heuristicLengths, String fileName) {
         String[] metrics = {"Max", "Min", "Median", "Mean", "Standard Deviation", "Performance"};
         System.out.println("Statistics for file: " + fileName);
@@ -124,6 +117,7 @@ public final class Analyze {
         for (String metric : metrics) {
             System.out.printf("%-20s", metric);
             for (ArrayList<Long> lengths : heuristicLengths.values()) {
+                lengths.sort(Long::compareTo);
                 double value = switch (metric) {
                     case "Max" -> lengths.getLast();
                     case "Min" -> lengths.getFirst();
@@ -146,6 +140,12 @@ public final class Analyze {
         }
     }
 
+    /**
+     * Compute the median of a sorted list of values.
+     *
+     * @param sortedValues the sorted list of values
+     * @return the median
+     */
     public static double median(ArrayList<Long> sortedValues) {
         if (sortedValues.size() % 2 == 1)
             return sortedValues.get((sortedValues.size() + 1) / 2 - 1);
@@ -155,6 +155,5 @@ public final class Analyze {
             return (lower + upper) / 2.0;
         }
     }
-
 }
 

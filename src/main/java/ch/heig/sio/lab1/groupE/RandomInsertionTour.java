@@ -39,7 +39,7 @@ public class RandomInsertionTour extends InsertionTour {
     }
 
     /**
-     * Iinitialize the tour with a random order of cities
+     * Initialize the tour with a random order of cities
      *
      * @param data           TspData
      * @param startCityIndex the start city

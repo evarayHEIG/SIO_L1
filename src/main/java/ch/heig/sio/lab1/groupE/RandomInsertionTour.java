@@ -14,11 +14,11 @@ import java.util.*;
 public class RandomInsertionTour extends InsertionTour {
 
     // ArrayList representing the order in which the cities are added to the tour
-    ArrayList<Integer> order;
+    private ArrayList<Integer> order;
     // The seed for the random number generator
-    int seed;
+    private final int seed;
     // The current index in the order list
-    int currentIndex = 0;
+    private int currentIndex = 0;
 
     /**
      * Default constructor

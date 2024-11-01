@@ -16,7 +16,7 @@ public abstract class DistanceBasedTour extends InsertionTour {
     /**
      * The list of candidate cities
      */
-    LinkedList<CandidateCity> candidateCities;
+    protected LinkedList<CandidateCity> candidateCities;
 
 
     /**
@@ -44,7 +44,7 @@ public abstract class DistanceBasedTour extends InsertionTour {
      * @param lastCityInserted The last citx that was inserted in the tour
      * @param candidateCities  The list of cities outside the tour
      */
-    public void updateClosestCities(TspData data, int lastCityInserted, LinkedList<CandidateCity> candidateCities) {
+    protected void updateClosestCities(TspData data, int lastCityInserted, LinkedList<CandidateCity> candidateCities) {
         // We remove the city that was just inserted from the list
         candidateCities.removeIf(city -> city.getUnvisitedVertex() == lastCityInserted);
 

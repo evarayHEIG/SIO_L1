@@ -31,7 +31,7 @@ public class NearestInsertionTour extends DistanceBasedTour {
      * @param candidateCities the list of candidate cities
      * @return the index of the closest city
      */
-    public int getClosestCity(LinkedList<CandidateCity> candidateCities) {
+    private int getClosestCity(LinkedList<CandidateCity> candidateCities) {
 
         // minDist is the minimum distance between a city outside the tour and the closest city in the tour
         double minDist = Double.MAX_VALUE;

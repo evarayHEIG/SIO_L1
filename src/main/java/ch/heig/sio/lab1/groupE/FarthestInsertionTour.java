@@ -28,7 +28,7 @@ public class FarthestInsertionTour extends DistanceBasedTour {
      *
      * @return the index of the farthest city
      */
-    int getFarthestCity() {
+    private int getFarthestCity() {
         // maxDist is the maximum distance between a city outside the tour and the closest city in the tour
         double maxDist = Double.MIN_VALUE;
         // maxCityIndex is the index of the city outside the tour that is the farthest from the closest city in the tour

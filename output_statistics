@@ -5,7 +5,8 @@ Min                 106471,00           91483,00            94465,00            
 Median              107443,00           94500,50            96823,00            86729,00
 Mean                107480,69           94532,50            96783,72            86729,00
 Standard Deviation  422,28              1096,27             695,44              0,00
-Performance         123,93              109,00              111,59              100,00
+Performance (%)     123,93              109,00              111,59              100,00
+
 Statistics for file: nrw1379
 Metric              Nearest Tour        Farthest Tour       Random Tour         Optimal Tour
 Max                 69778,00            64229,00            64375,00            56638,00
@@ -13,7 +14,8 @@ Min                 68982,00            61518,00            62769,00            
 Median              69473,00            62870,00            63667,00            56638,00
 Mean                69459,90            62879,20            63659,52            56638,00
 Standard Deviation  143,77              397,67              251,60              0,00
-Performance         122,64              111,02              112,40              100,00
+Performance (%)     122,64              111,02              112,40              100,00
+
 Statistics for file: pcb442
 Metric              Nearest Tour        Farthest Tour       Random Tour         Optimal Tour
 Max                 61829,00            59875,00            59650,00            50778,00
@@ -21,7 +23,8 @@ Min                 59212,00            55468,00            56983,00            
 Median              60287,00            57398,00            58324,00            50778,00
 Mean                60345,02            57407,23            58263,21            50778,00
 Standard Deviation  546,01              723,01              497,82              0,00
-Performance         118,84              113,06              114,74              100,00
+Performance (%)     118,84              113,06              114,74              100,00
+
 Statistics for file: pcb1173
 Metric              Nearest Tour        Farthest Tour       Random Tour         Optimal Tour
 Max                 72806,00            67238,00            67123,00            56892,00
@@ -29,7 +32,8 @@ Min                 70768,00            63628,00            65199,00            
 Median              72358,00            65704,00            65997,00            56892,00
 Mean                72216,36            65705,78            66036,55            56892,00
 Standard Deviation  468,50              498,91              350,96              0,00
-Performance         126,94              115,49              116,07              100,00
+Performance (%)     126,94              115,49              116,07              100,00
+
 Statistics for file: u574
 Metric              Nearest Tour        Farthest Tour       Random Tour         Optimal Tour
 Max                 46162,00            42027,00            42099,00            36905,00
@@ -37,7 +41,8 @@ Min                 44731,00            39379,00            40787,00            
 Median              45559,00            40819,00            41411,00            36905,00
 Mean                45518,51            40804,96            41403,64            36905,00
 Standard Deviation  315,34              456,22              306,41              0,00
-Performance         123,34              110,57              112,19              100,00
+Performance (%)     123,34              110,57              112,19              100,00
+
 Statistics for file: u1817
 Metric              Nearest Tour        Farthest Tour       Random Tour         Optimal Tour
 Max                 71537,00            71227,00            69518,00            57201,00
@@ -45,4 +50,4 @@ Min                 70139,00            67089,00            67620,00            
 Median              70931,00            69019,00            68678,00            57201,00
 Mean                70906,58            69001,62            68644,25            57201,00
 Standard Deviation  239,54              553,87              393,67              0,00
-Performance         123,96              120,63              120,01              100,00
+Performance (%)     123,96              120,63              120,01              100,00

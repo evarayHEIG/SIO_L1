@@ -36,14 +36,6 @@ public final class Analyze {
     ));
 
     public static void main(String[] args) {
-        // TODO
-        //  - Renommer le package ;
-        //  - Implémenter les différentes heuristiques en écrivant le code dans ce package, et uniquement celui-ci
-        //    (sous-packages et packages de tests ok) ;
-        //  - Factoriser le code commun entre les différentes heuristiques ;
-        //  - Documentation soignée comprenant :
-        //    - la javadoc, avec auteurs et description des implémentations ;
-        //    - des commentaires sur les différentes parties de vos algorithmes.
 
         // Array of heuristics to compare
         HeuristicComboItem[] heuristics = {
@@ -74,6 +66,7 @@ public final class Analyze {
                     }
                 }
                 printTable(results.get(file), file);
+                System.out.println();
             } catch (FileNotFoundException e) {
                 System.out.println(e.getMessage());
             }
@@ -95,7 +88,7 @@ public final class Analyze {
      * @param fileName         the file name
      */
     static void printTable(Map<String, ArrayList<Long>> heuristicLengths, String fileName) {
-        String[] metrics = {"Max", "Min", "Median", "Mean", "Standard Deviation", "Performance"};
+        String[] metrics = {"Max", "Min", "Median", "Mean", "Standard Deviation", "Performance (%)"};
         System.out.println("Statistics for file: " + fileName);
         System.out.printf("%-20s", "Metric");
         for (String heuristic : heuristicLengths.keySet()) {
@@ -114,7 +107,7 @@ public final class Analyze {
                     case "Mean" -> lengths.stream().mapToLong(Long::longValue).average().orElse(0);
                     case "Standard Deviation" ->
                             Math.sqrt(lengths.stream().mapToDouble(l -> Math.pow(l - median(lengths), 2)).sum() / lengths.size());
-                    case "Performance" ->
+                    case "Performance (%)" ->
                             lengths.stream().mapToLong(Long::longValue).average().orElse(0) * 100 / optimalLengths.get(fileName);
                     default -> 0;
                 };
@@ -122,7 +115,7 @@ public final class Analyze {
             }
             double value = switch (metric) {
                 case "Standard Deviation" -> 0;
-                case "Performance" -> 100;
+                case "Performance (%)" -> 100;
                 default -> optimalLengths.get(fileName);
             };
             System.out.printf("%-20.2f\n", value);

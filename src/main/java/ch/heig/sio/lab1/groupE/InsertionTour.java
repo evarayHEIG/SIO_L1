@@ -18,7 +18,7 @@ public abstract class InsertionTour implements ObservableTspConstructiveHeuristi
     /**
      * The current tour
      */
-    CustomLinkedList<Edge> currTour;
+    private CustomLinkedList<Edge> currTour;
 
     /**
      * Initializes the tour
